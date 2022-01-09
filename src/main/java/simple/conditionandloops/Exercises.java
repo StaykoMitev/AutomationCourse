@@ -83,4 +83,34 @@ public class Exercises {
         System.out.println("The revenue from sale: " + ((quantity*price)-(quantity*price*discount/100)) + "$");
         System.out.println("After discount: " + (quantity*price*discount/100) + "$ (" + discount + "%)");
     }
+
+    //Exercises 4
+    //Find the largest number from a given array and print it in a console. Hint: use for loop
+    public static void largestNum() {
+
+    }
+
+    //Exercises 5
+    //Write a program which advices the user where to go to a vacation based on the type of the vacation and the budget. There
+    //should be two options – Beach, Mountain. If the user put a different value then the program should print a message that there is
+    //no information about this type of vacation. Budgets are considered per day per person. If the budget per day for Beach type
+    //vacation is smaller than 50 then the program should advise Bulgaria as a destination, otherwise Outside Bulgaria. If the budget
+    //per day for Mountain type vacation is smaller than 30 then the program should advise Bulgaria as a destination, otherwise
+    //Outside Bulgaria.
+    public static void vacation() {
+
+    }
+
+    //Exercises 6
+    //Given a list iterate it and display numbers which are divisible by 5 and if you find number greater than 150 stop the loop
+    //iteration list1 = [12, 15, 32, 42, 55, 75, 122, 132, 150, 180, 200]
+    public static void divisible() {
+
+    }
+
+    //Exercises 7
+    //Reverse the following list using for loop list1 = [10, 20, 30, 40, 50]
+    public static void reverse() {
+
+    }
 }
