@@ -1,4 +1,4 @@
-package simple.ooppractice;
+package simple.oop.practice;
 
 public class OopPractice {
 }
