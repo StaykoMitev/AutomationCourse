@@ -1,5 +1,9 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
 
+import org.junit.jupiter.api.AfterEach;
+import org.junit.jupiter.api.BeforeAll;
+import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
@@ -18,15 +22,30 @@ public class Main {
 //
 //    }
 
-
-    @Test
-    public void test_signInWithUserName() throws InterruptedException {
-        System.out.println("Test - " + Thread.currentThread().getStackTrace()[1].getMethodName() + " has started");
+    @BeforeAll
+    static void beforeClass(){
+        System.out.println("Before Class");
+        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
         WebDriverManager.chromedriver().setup();
+    }
+
+    @BeforeEach
+    void beforeEachTest() {
+        System.out.println("Before Each Test");
         driver = new ChromeDriver();
         driver.manage().window().maximize();
 
         driver.get("http://training.skillo-bg.com:4300");
+    }
+
+    @Test
+    public void test_signInWithUserName() throws InterruptedException {
+//        System.out.println("Test - " + Thread.currentThread().getStackTrace()[1].getMethodName() + " has started");
+//        WebDriverManager.chromedriver().setup();
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//
+//        driver.get("http://training.skillo-bg.com:4300");
         driver.findElement(By.id("nav-link-login")).click();
         Thread.sleep(1000);
 
@@ -39,16 +58,17 @@ public class Main {
             System.out.println("Test failed. User is not on the expected page");
         } else System.out.println("Test passed successfully");
 
-        driver.quit();
+//        driver.quit();
     }
 
+    @Test
     public void test_signInWithEmail() throws InterruptedException {
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+//        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-
-        driver.get("http://training.skillo-bg.com:4300");
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//
+//        driver.get("http://training.skillo-bg.com:4300");
         driver.findElement(By.id("nav-link-login")).click();
         Thread.sleep(1000);
 
@@ -61,19 +81,20 @@ public class Main {
             System.out.println("Test failed. User is not on the expected page");
         } else System.out.println("Test passed successfully");
 
-        driver.quit();
+//        driver.quit();
     }
 
+    @Test
     public void test_registerNewUser() throws InterruptedException{
         //log that test has started
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+//        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
-        //setup driver
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-
-        //open page
-        driver.get("http://training.skillo-bg.com:4300");
+//        //setup driver
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//
+//        //open page
+//        driver.get("http://training.skillo-bg.com:4300");
 
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -100,19 +121,20 @@ public class Main {
         }
 
         //quit driver
-        driver.quit();
+//        driver.quit();
     }
 
+    @Test
     public void test_signOut() throws InterruptedException {
         //log that test has started
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+//        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
-        //setup driver
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-
-        //open page
-        driver.get("http://training.skillo-bg.com:4300");
+//        //setup driver
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//
+//        //open page
+//        driver.get("http://training.skillo-bg.com:4300");
 
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -133,20 +155,22 @@ public class Main {
         } else System.out.println("Test passed successfully");
 
         //quit driver
-        driver.quit();
+//        driver.quit();
     }
 
+    @Test
+    @Disabled
     public void test_addNewPost() throws InterruptedException {
         //log that test has started
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+//        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
-        //driver setup
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-
-        //go to home page
-        driver.get("http://training.skillo-bg.com:4300");
+//        //driver setup
+//        WebDriverManager.chromedriver().setup();
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//
+//        //go to home page
+//        driver.get("http://training.skillo-bg.com:4300");
 
         //click on login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -183,20 +207,22 @@ public class Main {
         }
 
         //quit driver
-        driver.quit();
+//        driver.quit();
     }
 
+    @Test
+    @Disabled
     public void test_addNewPostAndThenDeleteIt() throws InterruptedException {
         //log that test has started
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+//        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
-        //driver setup
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-
-        //go to home page
-        driver.get("http://training.skillo-bg.com:4300");
+//        //driver setup
+//        WebDriverManager.chromedriver().setup();
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//
+//        //go to home page
+//        driver.get("http://training.skillo-bg.com:4300");
 
         //open login form
         driver.findElement(By.id("nav-link-login")).click();
@@ -238,24 +264,25 @@ public class Main {
         Thread.sleep(3000);
 
         //quit driver
-        driver.quit();
+//        driver.quit();
     }
 
     public void test_likePost(){
 
     }
 
+    @Test
     public void test_findSpecificUser() throws InterruptedException {
         //log that test has started
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+//        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
-        //setup driver
-        WebDriverManager.chromedriver().setup();
-        driver = new ChromeDriver();
-        driver.manage().window().maximize();
-
-        //open home page
-        driver.get("http://training.skillo-bg.com:4300");
+//        //setup driver
+//        WebDriverManager.chromedriver().setup();
+//        driver = new ChromeDriver();
+//        driver.manage().window().maximize();
+//
+//        //open home page
+//        driver.get("http://training.skillo-bg.com:4300");
 
         //open login form
         driver.findElement(By.id("nav-link-login")).click();
@@ -271,6 +298,12 @@ public class Main {
         driver.findElement(By.id("search-bar")).sendKeys("stayko");
         ////*[@id="navbarColor01"]/form/div/app-search-dropdown/div/div[1]/app-small-user-profile/div/div[1]/a
 
+        //quit driver
+//        driver.quit();
+    }
+
+    @AfterEach
+    void afterEachTest() {
         //quit driver
         driver.quit();
     }
