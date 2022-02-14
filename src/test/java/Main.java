@@ -1,6 +1,6 @@
-package simple;
-
 import io.github.bonigarcia.wdm.WebDriverManager;
+
+import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -9,17 +9,19 @@ public class Main {
 
     static WebDriver driver;
 
-    public static void main(String[] args) throws InterruptedException {
-        //test_signInWithUserName();
-        //test_signInWithEmail();
-        //test_registerNewUser();
-        //test_signOut();
-        //test_addNewPost();
+//    public static void main(Str   ing[] args) throws InterruptedException {
+//        //test_signInWithUserName();
+//        //test_signInWithEmail();
+//        //test_registerNewUser();
+//        //test_signOut();
+//        //test_addNewPost();
+//
+//    }
 
-    }
 
-    public static void test_signInWithUserName() throws InterruptedException {
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+    @Test
+    public void test_signInWithUserName() throws InterruptedException {
+        System.out.println("Test - " + Thread.currentThread().getStackTrace()[1].getMethodName() + " has started");
         WebDriverManager.chromedriver().setup();
         driver = new ChromeDriver();
         driver.manage().window().maximize();
@@ -40,7 +42,7 @@ public class Main {
         driver.quit();
     }
 
-    public static void test_signInWithEmail() throws InterruptedException {
+    public void test_signInWithEmail() throws InterruptedException {
         System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
         driver = new ChromeDriver();
@@ -62,7 +64,7 @@ public class Main {
         driver.quit();
     }
 
-    public static void test_registerNewUser() throws InterruptedException{
+    public void test_registerNewUser() throws InterruptedException{
         //log that test has started
         System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
@@ -101,7 +103,7 @@ public class Main {
         driver.quit();
     }
 
-    public static void test_signOut() throws InterruptedException {
+    public void test_signOut() throws InterruptedException {
         //log that test has started
         System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
@@ -134,7 +136,7 @@ public class Main {
         driver.quit();
     }
 
-    public static void test_addNewPost() throws InterruptedException {
+    public void test_addNewPost() throws InterruptedException {
         //log that test has started
         System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
@@ -162,12 +164,12 @@ public class Main {
 
         //upload file and wait
         driver.findElement(By.xpath("/html/body/app-root/div[2]/app-create-post/div/div/div/form/div[2]/input"))
-                .sendKeys("C:\\Users\\stayk\\IdeaProjects\\photo\\trout.png");
+              .sendKeys("C:\\Users\\stayk\\IdeaProjects\\photo\\trout.png");
         Thread.sleep(1000);
 
         //add post description and click on create post
         driver.findElement(By.xpath("/html/body/app-root/div[2]/app-create-post/div/div/div/form/div[2]/div[3]/input"))
-                .sendKeys("Amazing fish!");
+              .sendKeys("Amazing fish!");
         driver.findElement(By.id("create-post")).click();
         Thread.sleep(3000);
 
@@ -184,7 +186,7 @@ public class Main {
         driver.quit();
     }
 
-    public static void test_addNewPostAndThenDeleteIt() throws InterruptedException {
+    public void test_addNewPostAndThenDeleteIt() throws InterruptedException {
         //log that test has started
         System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
@@ -212,12 +214,12 @@ public class Main {
 
         //upload file
         driver.findElement(By.xpath("/html/body/app-root/div[2]/app-create-post/div/div/div/form/div[2]/input"))
-                .sendKeys("C:\\Users\\stayk\\IdeaProjects\\photo\\trout.png");
+              .sendKeys("C:\\Users\\stayk\\IdeaProjects\\photo\\trout.png");
         Thread.sleep(1000);
 
         //add description to the post
         driver.findElement(By.xpath("/html/body/app-root/div[2]/app-create-post/div/div/div/form/div[2]/div[3]/input"))
-                .sendKeys("Amazing fish!");
+              .sendKeys("Amazing fish!");
 
         //create post
         driver.findElement(By.id("create-post")).click();
@@ -239,11 +241,11 @@ public class Main {
         driver.quit();
     }
 
-    public static void test_likePost(){
+    public void test_likePost(){
 
     }
 
-    public static void test_findSpecificUser() throws InterruptedException {
+    public void test_findSpecificUser() throws InterruptedException {
         //log that test has started
         System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
 
@@ -273,4 +275,3 @@ public class Main {
         driver.quit();
     }
 }
-
