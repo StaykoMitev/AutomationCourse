@@ -1,3 +1,9 @@
+import static java.time.Duration.ofMillis;
+import static org.junit.jupiter.api.Assertions.assertAll;
+import static org.junit.jupiter.api.Assertions.assertEquals;
+import static org.junit.jupiter.api.Assertions.assertNotNull;
+import static org.junit.jupiter.api.Assertions.assertNull;
+import static org.junit.jupiter.api.Assertions.assertTimeout;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 import org.junit.jupiter.api.AfterEach;
@@ -40,7 +46,7 @@ public class Tests {
         int i = 3;
 
         System.out.println(testInfo.getDisplayName() + "-->" + repInfo.getCurrentRepetition());
-        Assertions.assertEquals(1, 1);
+        assertEquals(1, 1);
 //        Assertions.assertEquals(repInfo.getCurrentRepetition(), i);
     }
 
@@ -56,17 +62,41 @@ public class Tests {
         System.out.println("test_6");
     }
 
+    @Test
+    @Tag("assert")
+    void test7() {
+        String firstName = null;
+
+        System.out.println("test_7");
+        assertEquals(2, 1+1, "error");
+        assertTrue(2 == 2, "Error");
+        assertAll("Check all names",
+                  () -> assertEquals("Jane", "Jane"),
+                  () -> assertEquals("Doe", "Doe")
+        );
+
+        assertNull(firstName);
+        assertNotNull(firstName);
+
+        // The following assertion fails with an error message similar to:
+        // execution exceeded timeout of 10 ms by 91 ms
+        assertTimeout(ofMillis(10), () -> {
+            // Simulate task that takes more than 10 ms.
+            Thread.sleep(100);
+        });
+    }
+
     @BeforeAll
     static void beforeClass() {
         System.out.println("Before All tests, will be executed once.");
     }
 
-//    @BeforeEach
+    @BeforeEach
     void beforeEachTest() {
         System.out.println("Before Each Test");
     }
 
-//    @AfterEach
+    @AfterEach
     void afterEachTest() {
         System.out.println("After Each Test");
         System.out.println("=====================");
