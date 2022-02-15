@@ -19,7 +19,7 @@ import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
 import org.junit.jupiter.params.provider.ValueSource;
 
-@Tag("smoke")
+//@Tag("smoke")
 public class Tests {
 
     @Test
@@ -28,15 +28,16 @@ public class Tests {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"cali", "bali", "dani" })
+    @ValueSource(strings = {"cal", "bali", "dani" })
     void test2(String str) {
         System.out.println("test_2");
         assertTrue(str.endsWith("i"));
     }
 
+    //This tests is doing the following
     @Test
-    @DisplayName("Custom name")
-    void test3() {
+    @DisplayName("[TL-123] Login with valid username and password")
+    void successfulLogin() {
         System.out.println("test_3");
     }
 
@@ -45,13 +46,14 @@ public class Tests {
         System.out.println("test_4");
         int i = 3;
 
-        System.out.println(testInfo.getDisplayName() + "-->" + repInfo.getCurrentRepetition());
-        assertEquals(1, 1);
-//        Assertions.assertEquals(repInfo.getCurrentRepetition(), i);
+        System.out.println(repInfo.getCurrentRepetition());
+//        assertEquals(1, 1);
+        Assertions.assertEquals(repInfo.getCurrentRepetition(), i);
     }
 
     @Test
     @Tag("login")
+    @Tag("P1")
     void test5() {
         System.out.println("test_5");
     }
@@ -68,35 +70,36 @@ public class Tests {
         String firstName = null;
 
         System.out.println("test_7");
-        assertEquals(2, 1+1, "error");
-        assertTrue(2 == 2, "Error");
+//        assertEquals(2, 3);
+//        assertTrue(2 == 3);
+
         assertAll("Check all names",
-                  () -> assertEquals("Jane", "Jane"),
+                  () -> assertEquals("Dane", "Dane"),
                   () -> assertEquals("Doe", "Doe")
         );
 
-        assertNull(firstName);
-        assertNotNull(firstName);
+//        assertNull(firstName);
+//        assertNotNull(firstName);
 
         // The following assertion fails with an error message similar to:
         // execution exceeded timeout of 10 ms by 91 ms
-        assertTimeout(ofMillis(10), () -> {
+        assertTimeout(ofMillis(2000), () -> {
             // Simulate task that takes more than 10 ms.
-            Thread.sleep(100);
+            Thread.sleep(9);
         });
     }
 
-    @BeforeAll
+//    @BeforeAll
     static void beforeClass() {
         System.out.println("Before All tests, will be executed once.");
     }
 
-    @BeforeEach
+//    @BeforeEach
     void beforeEachTest() {
         System.out.println("Before Each Test");
     }
 
-    @AfterEach
+//    @AfterEach
     void afterEachTest() {
         System.out.println("After Each Test");
         System.out.println("=====================");

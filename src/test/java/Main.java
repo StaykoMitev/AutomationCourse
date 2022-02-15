@@ -25,13 +25,14 @@ public class Main {
     @BeforeAll
     static void beforeClass(){
         System.out.println("Before Class");
-        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
         WebDriverManager.chromedriver().setup();
     }
 
     @BeforeEach
     void beforeEachTest() {
         System.out.println("Before Each Test");
+        System.out.println("Test - "+Thread.currentThread().getStackTrace()[1].getMethodName()+" has started");
+
         driver = new ChromeDriver();
         driver.manage().window().maximize();
 
