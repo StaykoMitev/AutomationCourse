@@ -89,17 +89,17 @@ public class Tests {
         });
     }
 
-//    @BeforeAll
+    @BeforeAll
     static void beforeClass() {
         System.out.println("Before All tests, will be executed once.");
     }
 
-//    @BeforeEach
+    @BeforeEach
     void beforeEachTest() {
         System.out.println("Before Each Test");
     }
 
-//    @AfterEach
+    @AfterEach
     void afterEachTest() {
         System.out.println("After Each Test");
         System.out.println("=====================");
