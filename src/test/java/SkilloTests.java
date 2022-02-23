@@ -63,7 +63,6 @@ public class SkilloTests {
     @Test
     public void test_signInWithEmail() throws InterruptedException {
         driver.findElement(By.id("nav-link-login")).click();
-        //Thread.sleep(1000);
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
 
@@ -71,10 +70,8 @@ public class SkilloTests {
         driver.findElement(By.id("defaultLoginFormUsername")).sendKeys("stayko1@gmail.com");
         driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
         driver.findElement(By.id("sign-in-button")).click();
-        //Thread.sleep(1000);
 
         WebElement signOut = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
-//        WebElement signOut1 = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[contains(@class,'sign-out')]"))));
 
         assertTrue(signOut.isDisplayed(), "Sign out button not displayed.");
     }
@@ -84,10 +81,7 @@ public class SkilloTests {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
 
-//        driver.findElement(By.xpath("/html/body/app-root/div[2]/app-login/div/div/form/p[2]/a")).click();
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Register')]"))).click();
-
-        //Thread.sleep(1000);
 
         Date date = new Date();
         long random = date.getTime();
@@ -102,10 +96,8 @@ public class SkilloTests {
 
         //submit form
         driver.findElement(By.id("sign-in-button")).click();
-        //Thread.sleep(1000);
 
         WebElement signOut = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
-//        WebElement signOut1 = wait.until(ExpectedConditions.visibilityOf(driver.findElement(By.xpath("//*[contains(@class,'sign-out')]"))));
 
         assertTrue(signOut.isDisplayed(), "Sign out button not displayed.");
     }
@@ -117,9 +109,6 @@ public class SkilloTests {
 
         //open registration form and wait for 1 second
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Register')]"))).click();
-//        wait.until(ExpectedConditions.elementToBeClickable(By.xpath("/html/body/app-root/div[2]/app-login/div/div/form/p[2]/a"))).click();
-
-        //Thread.sleep(1000);
 
         //fill in registration form
         driver.findElement(By.cssSelector("input[formcontrolname='username']")).sendKeys("123123");
@@ -131,16 +120,6 @@ public class SkilloTests {
 
         //submit form
         driver.findElement(By.id("sign-in-button")).click();
-//
-//        wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@aria-label,'Username taken')]")));
-//        assertTrue(driver.findElement(By.xpath("//*[contains(@aria-label,'Username taken')]")).isDisplayed(), "Username taken message does not appear.");
-//
-//        wait.until(ExpectedConditions.invisibilityOfElementLocated(By.xpath("//*[contains(@aria-label,'Username taken')]")));
-//
-//
-
-
-
 
         Wait<WebDriver> wait = new FluentWait<WebDriver>(driver)
             .withTimeout(Duration.ofSeconds(5))
@@ -155,7 +134,7 @@ public class SkilloTests {
         };
 
         WebElement errorMessage = wait.until(function);
-//        assertTrue(errorMessage.isDisplayed());
+        assertTrue(errorMessage.isDisplayed());
     }
 
     @Test
@@ -165,53 +144,43 @@ public class SkilloTests {
         //Thread.sleep(1000);
 
         //fill in sign in page and wait for 1 second
-        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys("stayko1");
-//        wait.until(ExpectedConditions.elementToBeClickable(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
 
         driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
         driver.findElement(By.id("sign-in-button")).click();
-        //Thread.sleep(1000);
 
-//        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".fas.fa-sign-out-alt.fa-lg"))).click();
         //click on sign out button
-        driver.findElement(By.cssSelector(".fas.fa-sign-out-alt.fa-lg")).click();
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".fas.fa-sign-out-alt.fa-lg"))).click();
 
         //assert that user is on the correct page
-//        wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/users/login"));
-//        boolean isDisplayed = true;
+        wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/users/login"));
+        boolean isDisplayed = true;
 
-//        try {
-        driver.findElement(By.cssSelector(".fas.fa-sign-out-alt.fa-lg")).isDisplayed();
-//        } catch (Exception e)
-//        {
-//            isDisplayed = false;
-//        }
-//
-//        assertTrue(!isDisplayed, "Sign out button not displayed.");
+        try {
+            driver.findElement(By.cssSelector(".fas.fa-sign-out-alt.fa-lg")).isDisplayed();
+        } catch (Exception e)
+        {
+            isDisplayed = false;
+        }
 
-//        if (!driver.getCurrentUrl().equals("")){
-//            System.out.println("Test failed. User is not on the expected page");
-//        } else System.out.println("Test passed successfully");
+        assertTrue(!isDisplayed, "Sign out button not displayed.");
     }
 
     @Test
     public void test_addNewPost() throws InterruptedException {
 
-        signIn();
-
-        createPost();
-
-        //open post from profile page
-        driver.findElement(By.className("post-img")).click();
+        //got to login page and wait for 1 second
+        driver.findElement(By.id("nav-link-login")).click();
         //Thread.sleep(1000);
 
-        //assert that post with same description is present on profile page
-        if (driver.findElement(By.cssSelector("div[class=post-title]")).getText().equals("Amazing fish!")){
-            System.out.println("Test failed. Post was created successfully");
-        }
-    }
+        //fill in sign in page and wait for 1 second
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
 
-    public void createPost(){
+        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
+        driver.findElement(By.id("sign-in-button")).click();
+
+        wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".fas.fa-sign-out-alt.fa-lg")));
+
         //click on new post button
         driver.findElement(By.id("nav-link-new-post")).click();
         //Thread.sleep(1000);
@@ -228,17 +197,15 @@ public class SkilloTests {
         driver.findElement(By.xpath("/html/body/app-root/div[2]/app-create-post/div/div/div/form/div[2]/div[3]/input"))
               .sendKeys("Amazing fish!");
         driver.findElement(By.id("create-post")).click();
-    }
 
-    public void signIn(){
-        //click on login page and wait for 1 second
-        driver.findElement(By.id("nav-link-login")).click();
+        //open post from profile page
+        driver.findElement(By.className("post-img")).click();
         //Thread.sleep(1000);
 
-        //fill in form and login
-        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys("stayko1");
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
-        driver.findElement(By.id("sign-in-button")).click();
+        //assert that post with same description is present on profile page
+        if (driver.findElement(By.cssSelector("div[class=post-title]")).getText().equals("Amazing fish!")){
+            System.out.println("Test failed. Post was created successfully");
+        }
     }
 
     @Test
