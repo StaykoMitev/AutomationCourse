@@ -1,13 +1,10 @@
 import io.github.bonigarcia.wdm.WebDriverManager;
-
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
-import org.openqa.selenium.TimeoutException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
@@ -15,21 +12,26 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import org.junit.jupiter.api.Assertions;
+import pageObjects.pageFactory.HomePage;
+import pageObjects.classicPageObjects.LoginPage;
+import pageObjects.pageFactory.NewPostPage;
+import pageObjects.pageFactory.ProfilePage;
 
 import java.io.File;
-import java.security.Timestamp;
 import java.time.Duration;
 import java.util.Date;
 import java.util.function.Function;
 
-import static java.util.concurrent.TimeUnit.SECONDS;
-import static org.junit.jupiter.api.Assertions.*;
+import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SkilloTests {
 
     static WebDriver driver;
     WebDriverWait wait;
+    HomePage homePage;
+    LoginPage loginPage;
+    NewPostPage newPostPage;
+    ProfilePage profilePage;
 
     @BeforeAll
     static void beforeClass(){
@@ -42,26 +44,26 @@ public class SkilloTests {
         driver.manage().window().maximize();
 //        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-
+        homePage = new HomePage(driver);
+        loginPage = new LoginPage(driver);
+        newPostPage = new NewPostPage(driver);
+        profilePage = new ProfilePage(driver);
         driver.get("http://training.skillo-bg.com:4300");
     }
 
     @Test
     public void test_signInWithUserName() throws InterruptedException {
-        driver.findElement(By.id("nav-link-login")).click();
-
-        WebElement username = wait.until(ExpectedConditions.visibilityOfElementLocated(By.id("defaultLoginFormUsername")));
-        username.sendKeys("stayko1");
-
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
-        driver.findElement(By.id("sign-in-button")).click();
-
+        homePage.clickOnLoginButton();
+        wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4.mb-4")));
+        loginPage.enterUsername("stayko1");
+        loginPage.enterPassword("Stayko1");
+        loginPage.clickOnSignInButton();
         wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/posts/all"));
-        assertTrue(driver.findElement(By.xpath("//*[contains(@class,'sign-out')]")).isDisplayed(), "Sign out button not displayed.");
+        assertTrue(homePage.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
     @Test
-    public void test_signInWithEmail() throws InterruptedException {
+    public void test_signInWithEmail() {
         driver.findElement(By.id("nav-link-login")).click();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
@@ -77,7 +79,7 @@ public class SkilloTests {
     }
 
     @Test
-    public void test_registerNewUser() throws InterruptedException{
+    public void test_registerNewUser() {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
 
