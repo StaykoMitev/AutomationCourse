@@ -1,8 +1,9 @@
-import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
+import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.extension.ExtendWith;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
@@ -12,20 +13,25 @@ import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
-import pageObjects.pageFactory.HomePage;
-import pageObjects.classicPageObjects.LoginPage;
-import pageObjects.pageFactory.NewPostPage;
-import pageObjects.pageFactory.ProfilePage;
 
 import java.io.File;
 import java.time.Duration;
 import java.util.Date;
 import java.util.function.Function;
 
+import Utils.PropertiesLoader;
+import Utils.ScreenshotRule;
+import io.github.bonigarcia.wdm.WebDriverManager;
+import pageObjects.classicPageObjects.LoginPage;
+import pageObjects.pageFactory.HomePage;
+import pageObjects.pageFactory.NewPostPage;
+import pageObjects.pageFactory.ProfilePage;
+
+import static Utils.FileHelper.takeScreenShot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SkilloTests {
-
+@ExtendWith(ScreenshotRule.class)
+public class SkilloTestsPropertiesFile {
     static WebDriver driver;
     WebDriverWait wait;
     HomePage homePage;
@@ -33,9 +39,17 @@ public class SkilloTests {
     NewPostPage newPostPage;
     ProfilePage profilePage;
 
+    static private String email = null;
+    static private String password = null;
+    static private String url = null;
+
     @BeforeAll
     static void beforeClass(){
+        PropertiesLoader.loadProperties();
         WebDriverManager.chromedriver().setup();
+        url = PropertiesLoader.prop.getProperty("url");
+        email = PropertiesLoader.prop.getProperty("email");
+        password = PropertiesLoader.prop.getProperty("password");
     }
 
     @BeforeEach
@@ -48,7 +62,7 @@ public class SkilloTests {
         loginPage = new LoginPage(driver);
         newPostPage = new NewPostPage(driver);
         profilePage = new ProfilePage(driver);
-        driver.get("http://training.skillo-bg.com:4300");
+        driver.get(url);
     }
 
     @Test
@@ -58,7 +72,7 @@ public class SkilloTests {
         loginPage.enterUsername("stayko1");
         loginPage.enterPassword("Stayko1");
         loginPage.clickOnSignInButton();
-        wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/posts/all"));
+        wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/posts/all1"));
         assertTrue(homePage.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
@@ -66,11 +80,11 @@ public class SkilloTests {
     public void test_signInWithEmail() {
         driver.findElement(By.id("nav-link-login")).click();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys(email);
 
         driver.findElement(By.id("defaultLoginFormUsername")).clear();
-        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys("stayko1@gmail.com");
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
+        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys(email);
+        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys(password);
         driver.findElement(By.id("sign-in-button")).click();
 
         WebElement signOut = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
@@ -277,8 +291,9 @@ public class SkilloTests {
     }
 
     @AfterEach
-    void afterEachTest() {
+    void afterEachTest(TestInfo testInfo) {
         //quit driver
+        takeScreenShot(driver, "screenshots", testInfo.getDisplayName());
         driver.quit();
     }
 }
