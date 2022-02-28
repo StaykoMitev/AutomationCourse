@@ -9,7 +9,7 @@ public class EditProfileModal {
 
     public EditProfileModal(WebDriver driver){
         this.driver=driver;
-        //Initialise Elements
+        //Initialise Elements Page Factory
         PageFactory.initElements(driver, this);
     }
 }
