@@ -9,11 +9,12 @@ import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.params.ParameterizedTest;
+import org.junit.jupiter.params.provider.CsvFileSource;
 import org.junit.jupiter.params.provider.ValueSource;
 
 import java.io.IOException;
 
-import static Utils.FileHelper.cleanUpDirectory;
+import static Utils.FileHelper.*;
 import static java.time.Duration.ofMillis;
 import static org.junit.jupiter.api.Assertions.assertAll;
 import static org.junit.jupiter.api.Assertions.assertEquals;
@@ -30,10 +31,13 @@ public class DummyTests {
     }
 
     @ParameterizedTest
-    @ValueSource(strings = {"cal", "bali", "dani" })
-    void test2(String str) {
-        System.out.println("test_2");
-        assertTrue(str.endsWith("i"));
+    @CsvFileSource(resources = "/users.csv", numLinesToSkip = 1)
+//    @ValueSource(strings = {"cal", "bali", "dani" })
+    void test2(String username, String email, String password) {
+        System.out.println(username);
+        System.out.println(email);
+        System.out.println(password);
+//        assertTrue(str.endsWith("i"));
     }
 
     //This tests is doing the following

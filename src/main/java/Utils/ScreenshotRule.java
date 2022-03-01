@@ -21,7 +21,7 @@ public class ScreenshotRule implements TestWatcher {
 
     @Override
     public void testFailed(ExtensionContext context, Throwable cause) {
-        takeScreenShot(driver, "screenshots", context.getDisplayName());
+        takeScreenShot(driver, context.getDisplayName());
         driver.quit();
     }
 

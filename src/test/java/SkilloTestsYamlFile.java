@@ -1,3 +1,4 @@
+import Utils.PropertiesLoader;
 import Utils.ScreenshotRule;
 import Utils.YamlReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
@@ -35,15 +36,16 @@ import static Utils.FileHelper.takeScreenShot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SkilloTestsYamlFile {
-    private static final String env = "qa";
+    private static String env;
 
     //YAML data
-    private static final String envYamlFilePath = "config/env.yaml";
-    private static final YamlReader environmentsYamlReader = new YamlReader(envYamlFilePath);
+    private static String envYamlFilePath = "config/env.yaml";
+    private static YamlReader environmentsYamlReader = new YamlReader(envYamlFilePath);
     static private String email = null;
     static private String password = null;
     static private String url = null;
     static private String browser = null;
+    static private String username = null;
 
     static WebDriver driver;
     WebDriverWait wait;
@@ -56,10 +58,15 @@ public class SkilloTestsYamlFile {
     static void beforeClass() throws IOException {
         cleanUpDirectory();
 
-        browser = String.valueOf(environmentsYamlReader.<String>read("browser").get());
-        url = environmentsYamlReader.<String>read(env + ".url").get();
+        PropertiesLoader.loadProperties();
+        env = PropertiesLoader.prop.getProperty("executeOn");
+        browser = PropertiesLoader.prop.getProperty("browser");
+
+
+        url = environmentsYamlReader.read(env + ".url").get().toString();
         email = environmentsYamlReader.<String>read(env + ".email").get();
-        password = String.valueOf(environmentsYamlReader.<String>read(env + ".password").get());
+        password = environmentsYamlReader.<String>read(env + ".password").get();
+        username = environmentsYamlReader.<String>read(env + ".username").get();
 
         if (browser.equals("chrome")) {
             WebDriverManager.chromedriver().setup();
@@ -97,10 +104,10 @@ public class SkilloTestsYamlFile {
     public void test_signInWithUserName() throws InterruptedException {
         homePage.clickOnLoginButton();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4.mb-4")));
-        loginPage.enterUsername("stayko1");
-        loginPage.enterPassword("Stayko1");
+        loginPage.enterUsername(username);
+        loginPage.enterPassword(password);
         loginPage.clickOnSignInButton();
-        wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/posts/all1"));
+        wait.until(ExpectedConditions.urlToBe(url+"/posts/all"));
         assertTrue(homePage.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
@@ -218,9 +225,9 @@ public class SkilloTestsYamlFile {
         //Thread.sleep(1000);
 
         //fill in sign in page and wait for 1 second
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
+        wait.until(ExpectedConditions.elementToBeClickable(By.id("defaultLoginFormUsername"))).sendKeys(email);
 
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
+        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys(password);
         driver.findElement(By.id("sign-in-button")).click();
 
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".fas.fa-sign-out-alt.fa-lg")));
@@ -318,13 +325,9 @@ public class SkilloTestsYamlFile {
         ////*[@id="navbarColor01"]/form/div/app-search-dropdown/div/div[1]/app-small-user-profile/div/div[1]/a
     }
 
-    @AfterEach
-    void afterEachTest() {
-//
-//        if(testResult){
-//            takeScreenShot(driver, "screenshots", testInfo.getDisplayName());
-//        }
-//        //quit driver
-//        driver.quit();
-    }
+//    @AfterEach
+//    void afterEachTest() {
+////        //quit driver
+////        driver.quit();
+//    }
 }

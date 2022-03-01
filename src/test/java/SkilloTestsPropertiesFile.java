@@ -4,17 +4,21 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
+import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.chrome.ChromeDriver;
+import org.openqa.selenium.firefox.FirefoxDriver;
+import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
+import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
 import java.util.function.Function;
@@ -27,10 +31,10 @@ import pageObjects.pageFactory.HomePage;
 import pageObjects.pageFactory.NewPostPage;
 import pageObjects.pageFactory.ProfilePage;
 
+import static Utils.FileHelper.cleanUpDirectory;
 import static Utils.FileHelper.takeScreenShot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-@ExtendWith(ScreenshotRule.class)
 public class SkilloTestsPropertiesFile {
     static WebDriver driver;
     WebDriverWait wait;
@@ -42,19 +46,40 @@ public class SkilloTestsPropertiesFile {
     static private String email = null;
     static private String password = null;
     static private String url = null;
+    static private String browser = null;
 
     @BeforeAll
-    static void beforeClass(){
+    static void beforeClass() throws IOException {
+        cleanUpDirectory();
         PropertiesLoader.loadProperties();
-        WebDriverManager.chromedriver().setup();
         url = PropertiesLoader.prop.getProperty("url");
         email = PropertiesLoader.prop.getProperty("email");
         password = PropertiesLoader.prop.getProperty("password");
+        browser = PropertiesLoader.prop.getProperty("browser");
+
+        if (browser.equals("chrome")) {
+            WebDriverManager.chromedriver().setup();
+        }
+        else if (browser.equals("firefox")) {
+            WebDriverManager.firefoxdriver().setup();
+        } else if (browser.equals("safari")) {
+            WebDriverManager.safaridriver().setup();
+        }
     }
 
     @BeforeEach
     void beforeEachTest() {
-        driver = new ChromeDriver();
+        if (browser.equals("chrome")) {
+            driver = new ChromeDriver();
+        }
+        else if (browser.equals("firefox")) {
+            driver = new FirefoxDriver();
+        } else if (browser.equals("safari")) {
+            driver = new SafariDriver();
+        }
+
+        screenshotRule.setDriver(driver);
+
         driver.manage().window().maximize();
 //        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
         wait = new WebDriverWait(driver, Duration.ofSeconds(5));
@@ -65,14 +90,17 @@ public class SkilloTestsPropertiesFile {
         driver.get(url);
     }
 
+    @RegisterExtension
+    ScreenshotRule screenshotRule = new ScreenshotRule();
+
     @Test
     public void test_signInWithUserName() throws InterruptedException {
         homePage.clickOnLoginButton();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4.mb-4")));
         loginPage.enterUsername("stayko1");
-        loginPage.enterPassword("Stayko1");
+        loginPage.enterPassword(password);
         loginPage.clickOnSignInButton();
-        wait.until(ExpectedConditions.urlToBe("http://training.skillo-bg.com:4300/posts/all1"));
+        wait.until(ExpectedConditions.urlToBe(url + "/posts/all"));
         assertTrue(homePage.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
@@ -290,10 +318,9 @@ public class SkilloTestsPropertiesFile {
         ////*[@id="navbarColor01"]/form/div/app-search-dropdown/div/div[1]/app-small-user-profile/div/div[1]/a
     }
 
-    @AfterEach
-    void afterEachTest(TestInfo testInfo) {
-        //quit driver
-        takeScreenShot(driver, "screenshots", testInfo.getDisplayName());
-        driver.quit();
-    }
+//    @AfterEach
+//    void afterEachTest(TestInfo testInfo) {
+//        //quit driver
+////        driver.quit();
+//    }
 }
