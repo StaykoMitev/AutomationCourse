@@ -2,12 +2,7 @@ import Utils.PropertiesLoader;
 import Utils.ScreenshotRule;
 import Utils.YamlReader;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Tag;
-import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.ExtensionContext;
 import org.junit.jupiter.api.extension.RegisterExtension;
@@ -25,6 +20,7 @@ import pageObjects.pageFactory.HomePage;
 import pageObjects.classicPageObjects.LoginPage;
 import pageObjects.pageFactory.NewPostPage;
 import pageObjects.pageFactory.ProfilePage;
+import pageObjects.pageFactory.SkilloHeader;
 
 import java.io.File;
 import java.io.IOException;
@@ -54,6 +50,7 @@ public class SkilloTestsYamlFile {
     LoginPage loginPage;
     NewPostPage newPostPage;
     ProfilePage profilePage;
+    SkilloHeader skilloHeader;
 
     @BeforeAll
     static void beforeClass() throws IOException {
@@ -98,35 +95,39 @@ public class SkilloTestsYamlFile {
         loginPage = new LoginPage(driver);
         newPostPage = new NewPostPage(driver);
         profilePage = new ProfilePage(driver);
+        skilloHeader = new SkilloHeader(driver);
         driver.get(url);
     }
 
     @Test
     public void test_signInWithUserName() throws InterruptedException {
-        homePage.clickOnLoginButton();
+        skilloHeader.clickOnLoginButton();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4.mb-4")));
         loginPage.enterUsername(username);
         loginPage.enterPassword(password);
         loginPage.clickOnSignInButton();
         wait.until(ExpectedConditions.urlToBe(url+"/posts/all"));
-        assertTrue(homePage.isLogOutButtonDisplayed(), "Sign out button not displayed.");
+        assertTrue(skilloHeader.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
     @Test
-    @Tag("P1")
     public void test_signInWithEmail() {
-        driver.findElement(By.id("nav-link-login")).click();
+        skilloHeader.clickOnLoginButton();
+        //driver.findElement(By.id("nav-link-login")).click();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys(email);
 
-        driver.findElement(By.id("defaultLoginFormUsername")).clear();
-        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys(email);
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys(password);
-        driver.findElement(By.id("sign-in-button")).click();
+        loginPage.enterUsername(email);
+        loginPage.enterPassword(password);
+        loginPage.clickOnSignInButton();
+//        driver.findElement(By.id("defaultLoginFormUsername")).clear();
+//        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys(email);
+//        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys(password);
+//        driver.findElement(By.id("sign-in-button")).click();
 
-        WebElement signOut = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
+        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
 
-        assertTrue(signOut.isDisplayed(), "Sign out button not displayed.");
+        assertTrue(skilloHeader.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
     @Test
