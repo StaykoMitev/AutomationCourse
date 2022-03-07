@@ -1,4 +1,6 @@
 import base.BaseTest;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -17,6 +19,7 @@ import static org.junit.jupiter.api.Assertions.assertTrue;
 public class SkilloTestsPropertiesFile extends BaseTest {
 
     @Test
+    @DisplayName("Sign in with correct username")
     public void test_signInWithUserName() {
         skilloHeader.clickOnLoginButton();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4.mb-4")));
@@ -28,16 +31,15 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     }
 
     @Test
+    @DisplayName("Sign in with correct email")
     public void test_signInWithEmail() {
-        homePage.clickOnLoginButton();
-        driver.findElement(By.id("nav-link-login")).click();
+        skilloHeader.clickOnLoginButton();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys(email);
 
-        driver.findElement(By.id("defaultLoginFormUsername")).clear();
-        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys(email);
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys(password);
-        driver.findElement(By.id("sign-in-button")).click();
+        loginPage.enterUsername(email);
+        loginPage.enterUsername(password);
+        loginPage.clickOnSignInButton();
 
         WebElement signOut = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
 
@@ -45,6 +47,8 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     }
 
     @Test
+    @DisplayName("Register new user")
+    @Disabled
     public void test_registerNewUser() {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -71,6 +75,7 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     }
 
     @Test
+    @DisplayName("Register new user with taken user name")
     public void test_registerUserUsernameTaken() {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -106,6 +111,7 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     }
 
     @Test
+    @DisplayName("Sign in and then sign out")
     public void test_signOut() {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -135,6 +141,7 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     }
 
     @Test
+    @DisplayName("Add new post from button in the header")
     public void test_addNewPost() throws InterruptedException {
         //Click on login button
         skilloHeader.clickOnLoginButton();
@@ -163,7 +170,6 @@ public class SkilloTestsPropertiesFile extends BaseTest {
 
         newPostPage.clickOnCreatePostButton();
 
-        profilePage.getNumberOfPosts();
         //open post from profile page
         Thread.sleep(2000);
         driver.findElement(By.className("post-img")).click();
@@ -178,6 +184,7 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     }
 
     @Test
+    @DisplayName("Delete just created post")
     public void test_addNewPostAndThenDeleteIt() {
         //open login form
         driver.findElement(By.id("nav-link-login")).click();
@@ -227,6 +234,7 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     }
 
     @Test
+    @DisplayName("Find existing user from search bar in the header")
     public void test_findSpecificUser() {
         //open login form
         driver.findElement(By.id("nav-link-login")).click();

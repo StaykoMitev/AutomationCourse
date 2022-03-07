@@ -63,5 +63,4 @@ public class EditProfileModal {
     public void clickOnSaveButton(){
         saveButton.click();
     }
-
 }

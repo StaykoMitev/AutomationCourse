@@ -74,4 +74,5 @@ public class SkilloHeader {
     public boolean isLogOutButtonDisplayed(){
         return wait.until(ExpectedConditions.visibilityOf(logOutButton)).isDisplayed();
     }
+
 }
