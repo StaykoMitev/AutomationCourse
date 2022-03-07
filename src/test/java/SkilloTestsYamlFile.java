@@ -5,6 +5,7 @@ import io.github.bonigarcia.wdm.WebDriverManager;
 import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
+import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
 import org.junit.jupiter.api.TestInfo;
 import org.junit.jupiter.api.extension.ExtendWith;
@@ -112,6 +113,7 @@ public class SkilloTestsYamlFile {
     }
 
     @Test
+    @Tag("P1")
     public void test_signInWithEmail() {
         driver.findElement(By.id("nav-link-login")).click();
 
