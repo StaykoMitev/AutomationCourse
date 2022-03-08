@@ -112,6 +112,7 @@ public class SkilloTestsYamlFile {
 
     @Test
     public void test_signInWithEmail() {
+
         skilloHeader.clickOnLoginButton();
         //driver.findElement(By.id("nav-link-login")).click();
 
@@ -120,12 +121,6 @@ public class SkilloTestsYamlFile {
         loginPage.enterUsername(email);
         loginPage.enterPassword(password);
         loginPage.clickOnSignInButton();
-//        driver.findElement(By.id("defaultLoginFormUsername")).clear();
-//        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys(email);
-//        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys(password);
-//        driver.findElement(By.id("sign-in-button")).click();
-
-        //wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
 
         assertTrue(skilloHeader.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }

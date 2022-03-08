@@ -3,11 +3,10 @@ package base;
 import Utils.PropertiesLoader;
 import Utils.ScreenshotRule;
 import io.github.bonigarcia.wdm.WebDriverManager;
-import org.junit.jupiter.api.AfterEach;
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.TestInfo;
+import org.junit.jupiter.api.*;
 import org.junit.jupiter.api.extension.RegisterExtension;
+import org.junit.jupiter.api.extension.TestInstanceFactoryContext;
+import org.junit.jupiter.api.extension.TestWatcher;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.chrome.ChromeDriver;
 import org.openqa.selenium.firefox.FirefoxDriver;
@@ -22,6 +21,9 @@ import java.time.Duration;
 import static Utils.FileHelper.cleanUpDirectory;
 
 public class BaseTest {
+
+    protected TestInfo testInfo;
+    protected TestReporter testReporter;
 
     protected static WebDriver driver;
     protected WebDriverWait wait;
@@ -57,7 +59,7 @@ public class BaseTest {
     }
 
     @BeforeEach
-    void beforeEachTest() {
+    void beforeEachTest(TestInfo testInfoInjected, TestReporter testReporterInjected) {
         if (browser.equals("chrome")) {
             driver = new ChromeDriver();
         }
@@ -68,7 +70,8 @@ public class BaseTest {
         }
         screenshotRule.setDriver(driver);
         driver.manage().window().maximize();
-
+        testInfo = testInfoInjected;
+        testReporter = testReporterInjected;
         wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         homePage = new HomePage(driver);
         loginPage = new LoginPage(driver);
@@ -77,12 +80,15 @@ public class BaseTest {
         skilloHeader = new SkilloHeader(driver);
         editProfileModal = new EditProfileModal(driver);
         driver.get(url);
+
+        testReporter.publishEntry(testInfo.getDisplayName()+ " test - started");
     }
 
     @AfterEach
-    void afterEachTest(TestInfo testInfo) {
+    void afterEachTest(TestInfo testInfo, TestReporter testReporter) {
         //quit driver
         driver.quit();
+        testReporter.publishEntry(testInfo.getDisplayName()+ " test - finished");
     }
 
     @RegisterExtension

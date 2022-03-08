@@ -14,6 +14,8 @@ import java.io.File;
 import java.time.Duration;
 import java.util.Date;
 import java.util.function.Function;
+
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SkilloTestsPropertiesFile extends BaseTest {
@@ -27,12 +29,13 @@ public class SkilloTestsPropertiesFile extends BaseTest {
         loginPage.enterPassword(password);
         loginPage.clickOnSignInButton();
         wait.until(ExpectedConditions.urlToBe(url + "/posts/all"));
-        assertTrue(skilloHeader.isLogOutButtonDisplayed(), "Sign out button not displayed.");
+        assertFalse(skilloHeader.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
     @Test
     @DisplayName("Sign in with correct email")
     public void test_signInWithEmail() {
+        testReporter.publishEntry("Go to login page");
         skilloHeader.clickOnLoginButton();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys(email);
@@ -48,7 +51,7 @@ public class SkilloTestsPropertiesFile extends BaseTest {
 
     @Test
     @DisplayName("Register new user")
-    @Disabled
+    @Disabled("We can't clean up the created users")
     public void test_registerNewUser() {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -78,9 +81,11 @@ public class SkilloTestsPropertiesFile extends BaseTest {
     @DisplayName("Register new user with taken user name")
     public void test_registerUserUsernameTaken() {
         //got to login page and wait for 1 second
+        testReporter.publishEntry("Go to login page");
         driver.findElement(By.id("nav-link-login")).click();
 
         //open registration form and wait for 1 second
+        testReporter.publishEntry("Wait for register link to appear");
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Register')]"))).click();
 
         //fill in registration form
