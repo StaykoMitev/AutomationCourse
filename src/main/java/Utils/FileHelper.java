@@ -20,8 +20,8 @@ import java.util.Date;
 public class FileHelper implements TestWatcher {
 
     public static void cleanUpDirectory() throws IOException {
-        Path path = Path.of("screenshots");
-        FileUtils.cleanDirectory(path.toFile());
+//        Path path = Path.of("screenshots");
+//        FileUtils.cleanDirectory(path.toFile());
     }
 
     public static void takeScreenShot(WebDriver driver, String fileName) {

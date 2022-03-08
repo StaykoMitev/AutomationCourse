@@ -5,6 +5,7 @@ import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Disabled;
 import org.junit.jupiter.api.Tag;
 import org.junit.jupiter.api.Test;
+import utilities.PropertiesLoader;
 
 @Tag("smoke")
 public class TestBeforeAfter {
@@ -53,6 +54,9 @@ public class TestBeforeAfter {
     @BeforeEach
     void beforeMethod() {
         System.out.println("Will be executed before each method");
+        PropertiesLoader.loadProperties();
+        String brrowser = PropertiesLoader.prop.getProperty("browser");
+        System.out.println("Browser is: "+brrowser);
     }
 
     @AfterEach

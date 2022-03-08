@@ -1,6 +1,5 @@
 package pageObjects.pageFactory;
 
-import org.openqa.selenium.By;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
 import org.openqa.selenium.support.FindBy;
@@ -8,17 +7,17 @@ import org.openqa.selenium.support.PageFactory;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.WebDriverWait;
 
+import java.time.Duration;
 
-import java.util.List;
-
-public class HomePage {
+public class SkilloHeader {
 
     WebDriver driver;
     WebDriverWait wait;
 
-    public HomePage(WebDriver driver){
+    public SkilloHeader(WebDriver driver){
         this.driver=driver;
         //Initialise Elements
+        wait = new WebDriverWait(this.driver, Duration.ofSeconds(5));
         PageFactory.initElements(driver, this);
     }
 
@@ -43,14 +42,37 @@ public class HomePage {
     @FindBy(css=".fas.fa-sign-out-alt.fa-lg")
     private WebElement logOutButton;
 
-    @FindBy(css="div.post-feed-container")
-    private List<WebElement> posts;
-
-    public WebElement getPostByIndex(int index){
-        return posts.get(index);
+    public WebElement getLogOutButton() {
+        return wait.until(ExpectedConditions.visibilityOf(logOutButton));
     }
 
-    public String getPostUser(int index){
-        return getPostByIndex(index).findElement(By.className("post-user")).getText();
+    public void clickOnSkilloIcon(){
+        skilloIcon.click();
     }
+
+    public void clickOnHomeButton(){
+        homeButton.click();
+    }
+
+    public void clickOnLoginButton(){
+        loginButton.click();
+    }
+
+    public void clickOnProfileButton(){
+        profileButton.click();
+    }
+
+    public void clickOnNewPostButton(){
+        newPostButton.click();
+    }
+
+    public void clickOnSignOutButton(){
+        logOutButton.click();
+    }
+
+
+    public boolean isLogOutButtonDisplayed(){
+        return wait.until(ExpectedConditions.visibilityOf(logOutButton)).isDisplayed();
+    }
+
 }
