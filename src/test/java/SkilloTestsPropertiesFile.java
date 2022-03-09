@@ -1,9 +1,6 @@
-import org.junit.jupiter.api.AfterEach;
 import org.junit.jupiter.api.BeforeAll;
 import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.TestInfo;
-import org.junit.jupiter.api.extension.ExtendWith;
 import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
@@ -32,7 +29,6 @@ import pageObjects.pageFactory.NewPostPage;
 import pageObjects.pageFactory.ProfilePage;
 
 import static Utils.FileHelper.cleanUpDirectory;
-import static Utils.FileHelper.takeScreenShot;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
 public class SkilloTestsPropertiesFile {
