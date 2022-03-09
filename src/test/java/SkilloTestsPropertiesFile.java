@@ -1,115 +1,48 @@
-import org.junit.jupiter.api.BeforeAll;
-import org.junit.jupiter.api.BeforeEach;
+import base.BaseTest;
+import org.junit.jupiter.api.Disabled;
+import org.junit.jupiter.api.DisplayName;
 import org.junit.jupiter.api.Test;
-import org.junit.jupiter.api.extension.RegisterExtension;
 import org.openqa.selenium.By;
 import org.openqa.selenium.NoSuchElementException;
 import org.openqa.selenium.WebDriver;
 import org.openqa.selenium.WebElement;
-import org.openqa.selenium.chrome.ChromeDriver;
-import org.openqa.selenium.firefox.FirefoxDriver;
-import org.openqa.selenium.safari.SafariDriver;
 import org.openqa.selenium.support.ui.ExpectedConditions;
 import org.openqa.selenium.support.ui.FluentWait;
 import org.openqa.selenium.support.ui.Wait;
-import org.openqa.selenium.support.ui.WebDriverWait;
 
 import java.io.File;
-import java.io.IOException;
 import java.time.Duration;
 import java.util.Date;
 import java.util.function.Function;
 
-import Utils.PropertiesLoader;
-import Utils.ScreenshotRule;
-import io.github.bonigarcia.wdm.WebDriverManager;
-import pageObjects.classicPageObjects.LoginPage;
-import pageObjects.pageFactory.HomePage;
-import pageObjects.pageFactory.NewPostPage;
-import pageObjects.pageFactory.ProfilePage;
-
-import static Utils.FileHelper.cleanUpDirectory;
+import static org.junit.jupiter.api.Assertions.assertFalse;
 import static org.junit.jupiter.api.Assertions.assertTrue;
 
-public class SkilloTestsPropertiesFile {
-    static WebDriver driver;
-    WebDriverWait wait;
-    HomePage homePage;
-    LoginPage loginPage;
-    NewPostPage newPostPage;
-    ProfilePage profilePage;
-
-    static private String email = null;
-    static private String password = null;
-    static private String url = null;
-    static private String browser = null;
-
-    @BeforeAll
-    static void beforeClass() throws IOException {
-        cleanUpDirectory();
-        PropertiesLoader.loadProperties();
-        url = PropertiesLoader.prop.getProperty("url");
-        email = PropertiesLoader.prop.getProperty("email");
-        password = PropertiesLoader.prop.getProperty("password");
-        browser = PropertiesLoader.prop.getProperty("browser");
-
-        if (browser.equals("chrome")) {
-            WebDriverManager.chromedriver().setup();
-        }
-        else if (browser.equals("firefox")) {
-            WebDriverManager.firefoxdriver().setup();
-        } else if (browser.equals("safari")) {
-            WebDriverManager.safaridriver().setup();
-        }
-    }
-
-    @BeforeEach
-    void beforeEachTest() {
-        if (browser.equals("chrome")) {
-            driver = new ChromeDriver();
-        }
-        else if (browser.equals("firefox")) {
-            driver = new FirefoxDriver();
-        } else if (browser.equals("safari")) {
-            driver = new SafariDriver();
-        }
-
-        screenshotRule.setDriver(driver);
-
-        driver.manage().window().maximize();
-//        driver.manage().timeouts().implicitlyWait(Duration.ofSeconds(10));
-        wait = new WebDriverWait(driver, Duration.ofSeconds(5));
-        homePage = new HomePage(driver);
-        loginPage = new LoginPage(driver);
-        newPostPage = new NewPostPage(driver);
-        profilePage = new ProfilePage(driver);
-        driver.get(url);
-    }
-
-    @RegisterExtension
-    ScreenshotRule screenshotRule = new ScreenshotRule();
+public class SkilloTestsPropertiesFile extends BaseTest {
 
     @Test
-    public void test_signInWithUserName() throws InterruptedException {
-        homePage.clickOnLoginButton();
+    @DisplayName("Sign in with correct username")
+    public void test_signInWithUserName() {
+        skilloHeader.clickOnLoginButton();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4.mb-4")));
         loginPage.enterUsername("stayko1");
         loginPage.enterPassword(password);
         loginPage.clickOnSignInButton();
         wait.until(ExpectedConditions.urlToBe(url + "/posts/all"));
-        assertTrue(homePage.isLogOutButtonDisplayed(), "Sign out button not displayed.");
+        assertFalse(skilloHeader.isLogOutButtonDisplayed(), "Sign out button not displayed.");
     }
 
     @Test
+    @DisplayName("Sign in with correct email")
     public void test_signInWithEmail() {
-        driver.findElement(By.id("nav-link-login")).click();
+        testReporter.publishEntry("Go to login page");
+        skilloHeader.clickOnLoginButton();
 
         wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys(email);
 
-        driver.findElement(By.id("defaultLoginFormUsername")).clear();
-        driver.findElement(By.id("defaultLoginFormUsername")).sendKeys(email);
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys(password);
-        driver.findElement(By.id("sign-in-button")).click();
+        loginPage.enterUsername(email);
+        loginPage.enterUsername(password);
+        loginPage.clickOnSignInButton();
 
         WebElement signOut = wait.until(ExpectedConditions.visibilityOfElementLocated(By.xpath("//*[contains(@class,'sign-out')]")));
 
@@ -117,6 +50,8 @@ public class SkilloTestsPropertiesFile {
     }
 
     @Test
+    @DisplayName("Register new user")
+    @Disabled("We can't clean up the created users")
     public void test_registerNewUser() {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
@@ -143,11 +78,14 @@ public class SkilloTestsPropertiesFile {
     }
 
     @Test
-    public void test_registerUserUsernameTaken() throws InterruptedException {
+    @DisplayName("Register new user with taken user name")
+    public void test_registerUserUsernameTaken() {
         //got to login page and wait for 1 second
+        testReporter.publishEntry("Go to login page");
         driver.findElement(By.id("nav-link-login")).click();
 
         //open registration form and wait for 1 second
+        testReporter.publishEntry("Wait for register link to appear");
         wait.until(ExpectedConditions.elementToBeClickable(By.xpath("//a[contains(text(),'Register')]"))).click();
 
         //fill in registration form
@@ -178,7 +116,8 @@ public class SkilloTestsPropertiesFile {
     }
 
     @Test
-    public void test_signOut() throws InterruptedException {
+    @DisplayName("Sign in and then sign out")
+    public void test_signOut() {
         //got to login page and wait for 1 second
         driver.findElement(By.id("nav-link-login")).click();
         //Thread.sleep(1000);
@@ -207,49 +146,51 @@ public class SkilloTestsPropertiesFile {
     }
 
     @Test
+    @DisplayName("Add new post from button in the header")
     public void test_addNewPost() throws InterruptedException {
-
-        //got to login page and wait for 1 second
-        driver.findElement(By.id("nav-link-login")).click();
-        //Thread.sleep(1000);
+        //Click on login button
+        skilloHeader.clickOnLoginButton();
 
         //fill in sign in page and wait for 1 second
-        wait.until(ExpectedConditions.elementToBeClickable(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
+        Thread.sleep(2000);
+        loginPage.enterUsername("stayko1@gmail.com");
+        //wait.until(ExpectedConditions.elementToBeClickable(By.id("defaultLoginFormUsername"))).sendKeys("stayko1@gmail.com");
 
-        driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
-        driver.findElement(By.id("sign-in-button")).click();
+        loginPage.enterPassword("Stayko1");
+        //driver.findElement(By.id("defaultLoginFormPassword")).sendKeys("Stayko1");
+        loginPage.clickOnSignInButton();
+        //driver.findElement(By.id("sign-in-button")).click();
 
         wait.until(ExpectedConditions.elementToBeClickable(By.cssSelector(".fas.fa-sign-out-alt.fa-lg")));
 
         //click on new post button
-        driver.findElement(By.id("nav-link-new-post")).click();
-        //Thread.sleep(1000);
+        skilloHeader.clickOnNewPostButton();
+        //driver.findElement(By.id("nav-link-new-post")).click();
+        Thread.sleep(2000);
+        newPostPage.addPhotoToThePost("src/main/resources/trout.png");
 
-        File file = new File("src/main/resources/trout.png");
-        String absolutePath = file.getAbsolutePath();
-
-        //upload file and wait
-        driver.findElement(By.xpath("/html/body/app-root/div[2]/app-create-post/div/div/div/form/div[2]/input"))
-              .sendKeys(absolutePath);
-        //Thread.sleep(1000);
 
         //add post description and click on create post
-        driver.findElement(By.xpath("/html/body/app-root/div[2]/app-create-post/div/div/div/form/div[2]/div[3]/input"))
-              .sendKeys("Amazing fish!");
-        driver.findElement(By.id("create-post")).click();
+        newPostPage.enterPostDescription("Amazing fish!");
+
+        newPostPage.clickOnCreatePostButton();
 
         //open post from profile page
+        Thread.sleep(2000);
         driver.findElement(By.className("post-img")).click();
         //Thread.sleep(1000);
 
         //assert that post with same description is present on profile page
+        Thread.sleep(2000);
         if (driver.findElement(By.cssSelector("div[class=post-title]")).getText().equals("Amazing fish!")){
             System.out.println("Test failed. Post was created successfully");
         }
+        Thread.sleep(5000);
     }
 
     @Test
-    public void test_addNewPostAndThenDeleteIt() throws InterruptedException {
+    @DisplayName("Delete just created post")
+    public void test_addNewPostAndThenDeleteIt() {
         //open login form
         driver.findElement(By.id("nav-link-login")).click();
         //Thread.sleep(1000);
@@ -298,7 +239,8 @@ public class SkilloTestsPropertiesFile {
     }
 
     @Test
-    public void test_findSpecificUser() throws InterruptedException {
+    @DisplayName("Find existing user from search bar in the header")
+    public void test_findSpecificUser() {
         //open login form
         driver.findElement(By.id("nav-link-login")).click();
         //Thread.sleep(1000);
