@@ -22,6 +22,7 @@ public class SkilloTestsPropertiesFile extends BaseTest {
 
     @Test
     @DisplayName("Sign in with correct username")
+    @Disabled
     public void test_signInWithUserName() {
         skilloHeader.clickOnLoginButton();
         wait.until(ExpectedConditions.visibilityOfElementLocated(By.cssSelector(".h4.mb-4")));
@@ -34,11 +35,12 @@ public class SkilloTestsPropertiesFile extends BaseTest {
 
     @Test
     @DisplayName("Sign in with correct email")
+    @Disabled
     public void test_signInWithEmail() {
         testReporter.publishEntry("Go to login page");
         skilloHeader.clickOnLoginButton();
 
-        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername"))).sendKeys(email);
+        wait.until(ExpectedConditions.presenceOfElementLocated(By.id("defaultLoginFormUsername")));
 
         loginPage.enterUsername(email);
         loginPage.enterUsername(password);
@@ -79,10 +81,10 @@ public class SkilloTestsPropertiesFile extends BaseTest {
 
     @Test
     @DisplayName("Register new user with taken user name")
+    @Disabled
     public void test_registerUserUsernameTaken() {
-        //got to login page and wait for 1 second
         testReporter.publishEntry("Go to login page");
-        driver.findElement(By.id("nav-link-login")).click();
+        skilloHeader.clickOnLoginButton();
 
         //open registration form and wait for 1 second
         testReporter.publishEntry("Wait for register link to appear");
@@ -174,18 +176,20 @@ public class SkilloTestsPropertiesFile extends BaseTest {
         newPostPage.enterPostDescription("Amazing fish!");
 
         newPostPage.clickOnCreatePostButton();
+        profilePage.deleteAllPosts();
 
-        //open post from profile page
-        Thread.sleep(2000);
-        driver.findElement(By.className("post-img")).click();
-        //Thread.sleep(1000);
-
-        //assert that post with same description is present on profile page
-        Thread.sleep(2000);
-        if (driver.findElement(By.cssSelector("div[class=post-title]")).getText().equals("Amazing fish!")){
-            System.out.println("Test failed. Post was created successfully");
-        }
-        Thread.sleep(5000);
+        Thread.sleep(20000);
+//        //open post from profile page
+//        Thread.sleep(2000);
+//        driver.findElement(By.className("post-img")).click();
+//        //Thread.sleep(1000);
+//
+//        //assert that post with same description is present on profile page
+//        Thread.sleep(2000);
+//        if (driver.findElement(By.cssSelector("div[class=post-title]")).getText().equals("Amazing fish!")){
+//            System.out.println("Test failed. Post was created successfully");
+//        }
+//        Thread.sleep(5000);
     }
 
     @Test
@@ -255,4 +259,10 @@ public class SkilloTestsPropertiesFile extends BaseTest {
         driver.findElement(By.id("search-bar")).sendKeys("stayko");
         ////*[@id="navbarColor01"]/form/div/app-search-dropdown/div/div[1]/app-small-user-profile/div/div[1]/a
     }
+
+//    @AfterEach
+//    void afterEachTest(TestInfo testInfo) {
+//        //quit driver
+////        driver.quit();
+//    }
 }
