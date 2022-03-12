@@ -25,7 +25,7 @@ public class LoginPage {
         //Initialise Elements Page Factory
         wait = new WebDriverWait(driver, Duration.ofSeconds(5));
         //Initialise Elements Page Factory with default wait time of 5 seconds
-        PageFactory.initElements(new AjaxElementLocatorFactory(driver, 5), this);
+        PageFactory.initElements(driver, this);
     }
 
     @FindBy(id="defaultLoginFormUsername")
